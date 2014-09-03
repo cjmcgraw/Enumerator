@@ -3,31 +3,40 @@ interface
 """
 from abc import ABCMeta, abstractmethod
 
-class AbstractProcessAdapter(Object):
+
+class AbstractProcessAdapter(object):
     """AbstractProcessAdapter defines
     the required functionality for an
     object to be a useable ProcessAdapter
     """
 
+    __metaclass__ = ABCMeta
+
     @abstractmethod
-    def execute(command, **subcommands, **flags):
+    def execute(self, command, *args, **flags):
         """Executes the given string
-        command, with the given flags.
+        command, with the given flags
 
         @param command: str representing
         the command to be executed
 
-        @param subcommands: arg catchall
-        these are subcommands that should
-        be called as part of the main command.
-        Each sub command will be called in the
-        respective order given
+        @param args: arg represent arguments
+        that are to be passed to the command
+        in the given order
 
-        @keyword flags: keyword catchall
-        that will catch all the flags to
-        be called on this command. Flags
-        are called in a randomly decided order
-        and each flag is called with a '-'leading
-        its name
+        @keyword flags: keyword catchall that
+        represents the flags. Each flag is given
+        as a key value pair, representing the
+        flag and the associated value respectively.
+        All flags will be parsed into their respective
+        prefix and should be without them when passed
+        to this method. If you wish a simple flag to
+        be called without any value simply give it a
+        True value, which will be interpreted as the
+        flag standing alone. False however will call
+        the flag with the False value
+
+        @return bool: representing if the call was
+        successfully made or not
         """
         pass
