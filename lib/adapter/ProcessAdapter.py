@@ -78,7 +78,39 @@ class ProcessAdapter(AbstractProcessAdapter):
             prefix = self.COMPLEX_FLAG_PREFIX if (len(flag) > 1) else self.SIMPLE_FLAG_PREFIX
             result.append(prefix + flag)
 
+            self._validate_value(value)
             if value is not True:
                 result.append(str(value))
 
         return tuple(result)
+
+    def _validate_value(self, value):
+        """Validates if the given value is
+        of the required format.
+
+        @raise NameError: if the value is
+        not of the required format
+
+        @return: bool value representing
+        if the test was passed
+        """
+        if self._value_has_flag_format(value):
+            msg = "Flag values cannot contain a leading " \
+                  "\"{}\" or \"{}\" that is confusing!".format(self.SIMPLE_FLAG_PREFIX,
+                                                               self.COMPLEX_FLAG_PREFIX)
+            raise NameError(msg)
+        return True
+
+    def _value_has_flag_format(self, value):
+        """Checks if the given value has the
+        required flag format.
+
+        @param value: object that is castable
+        to a string
+
+        @return: bool representing if the
+        given value is of the flag format
+        """
+        value_str = str(value)
+        return (value_str.startswith(self.SIMPLE_FLAG_PREFIX) or
+                value_str.startswith(self.COMPLEX_FLAG_PREFIX))

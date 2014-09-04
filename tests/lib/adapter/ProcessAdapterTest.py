@@ -23,7 +23,10 @@ class ProcessAdapterTest(TestCase, ProcessAdapter):
     ARGS = tuple(["arg" + str(x) for x in range(10)])
 
     def setUp(self):
-        self._executions = []
+        self._command_line_call = []
+
+    def tearDown(self):
+        del self._command_line_call
 
     def test_execute_single_command(self):
         # Set up
@@ -313,6 +316,62 @@ class ProcessAdapterTest(TestCase, ProcessAdapter):
         # Test
         self.__test_execute(expected, cmd, *self.ARGS[:3], f=1, g=False, h="some words", keyword0=2, keyword1=False,
                             keyword2="some other words")
+
+    def test_execute_with_invalid_flag_value_matches_simple_flag(self):
+        # Apply + Assert
+        self.assertRaises(NameError, self.execute, "cmd", f="-x")
+
+    def test_execute_with_invalid_flag_value_matches_simple_flag__command_never_called(self):
+        # Apply
+        try:
+            self.execute("cmd", f="-x")
+        except NameError:
+            pass
+
+        # Assert
+        self.assertEquals([], self._command_line_call)
+
+    def test_execute_with_invalid_flag_value_matches_complex_flag(self):
+        # Apply + Assert
+        self.assertRaises(NameError, self.execute, "cmd", f="--x")
+
+    def test_execute_with_invalid_flag_value_matches_complex_flag__command_never_called(self):
+        # Apply
+        try:
+            self.execute("cmd", f="--x")
+        except NameError:
+            pass
+
+        # Assert
+        self.assertEquals([], self._command_line_call)
+
+    def test_execute_with_invalid_keyword_value_matches_simple_flag(self):
+        # Apply + Assert
+        self.assertRaises(NameError, self.execute, "cmd", keyword="-x")
+
+    def test_execute_with_invalid_keyword_value_matches_simple_flag__command_never_called(self):
+        # Apply
+        try:
+            self.execute("cmd", keyword="-x")
+        except NameError:
+            pass
+
+        # Assert
+        self.assertEquals([], self._command_line_call)
+
+    def test_execute_with_invalid_keyword_value_matches_complex_flag(self):
+        # Apply + Assert
+        self.assertRaises(NameError, self.execute, "cmd", keyword="--x")
+
+    def test_execute_with_invalid_keyword_value_matches_complex_flag__command_never_called(self):
+        # Apply
+        try:
+            self.execute("cmd", keyword="--x")
+        except NameError:
+            pass
+
+        # Assert
+        self.assertEquals([], self._command_line_call)
 
     def __test_execute(self, expected, cmd, *args, **kwargs):
         # Apply
