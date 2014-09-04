@@ -6,7 +6,7 @@ of commands.
 @contact: cjmcgraw(- at -)u.washington.edu
 @version: 1.0
 """
-from subprocess import check_call
+from subprocess import Popen, PIPE
 from .AbstractProcessAdapter import AbstractProcessAdapter
 
 
@@ -41,12 +41,12 @@ class ProcessAdapter(AbstractProcessAdapter):
         before flag arguments ("-", "--") as
         the system will include them automatically
 
-        @return bool: representing if the call was
-        successful or not.
+        @return subprocess.Popen: Returns a Popen
+        object that represents the call made
         """
         cmnds = (command,) + args + self._parse_flags(**flags)
         return_code = self._execute(cmnds)
-        return bool(return_code)
+        return return_code
 
     def _execute(self, cmds):
         """Executes the command
@@ -55,10 +55,11 @@ class ProcessAdapter(AbstractProcessAdapter):
         representing the commands
         to be executed
 
-        @return: int representing
-         the return code of the call
+        @return: subprocess.Popen:
+        Returns a Popen object that
+        represents the call made
         """
-        return check_call(cmds)
+        return Popen(cmds, stdout=PIPE, stderr=PIPE)
 
     def _parse_flags(self, **flags):
         """Parses the flag arguments into
