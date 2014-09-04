@@ -59,7 +59,7 @@ class ProcessAdapter(AbstractProcessAdapter):
         Returns a Popen object that
         represents the call made
         """
-        return Popen(cmds, stdout=PIPE, stderr=PIPE)
+        return Popen(cmds, stdout=PIPE, stderr=PIPE, universal_newlines=True)
 
     def _parse_flags(self, **flags):
         """Parses the flag arguments into
