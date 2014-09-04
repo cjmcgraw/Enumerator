@@ -1,5 +1,9 @@
 """Describes the AbstractProcessAdapter
 interface
+
+@author: Carl McGraw
+@contact: cjmcgraw(- at -)u.washington.edu
+@version: 1.0
 """
 from abc import ABCMeta, abstractmethod
 
