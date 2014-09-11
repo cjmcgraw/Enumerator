@@ -1,1 +1,9 @@
+<<<<<<< HEAD
 # Created by .gitignore support plugin (hsz.mobi)
+=======
+.DS_Store
+*.pyc
+MANIFEST
+env/
+dist/
+>>>>>>> 0b47374a338c2c7dbaad9d301efa2a104736908d
